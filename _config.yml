@@ -1,7 +1,7 @@
 # Site settings
 title: Suyeon Lee's Portfolio
-email: syeun023@gamil.com
-url: https://github.com/jeromelachaud/freelancer-theme
+email: syeun023@gmail.com
+url: https://github.com/LEESUSUSUSU
 description: "호기심 가득한 나의 포트폴리오를 통해 데이터 과학과 분석 프로젝트를 만나보세요.(Explore my curious portfolio featuring data science and analysis projects.)" 
 keywords: "데이터 과학자, 데이터 분석가, 프로젝트, 창의성(data scientist, data analyst, projects, creativity)"
 skills: "Data Scientist - Data Analyst "
@@ -17,7 +17,7 @@ bing_verify:
 # - static : pass through formspree.io to validate email sending
 # - disqus : replace contact form by disqus thread
 # - comment the line below if you want to stick with the default PHP contact form
-# contact: static
+contact: static
 
 # If you use disqus you need disqus shortname
 # https://help.disqus.com/customer/portal/articles/466208
@@ -39,15 +39,12 @@ footer:
 
 # Social networks usernames (many more available: google-plus, flickr, dribbble, pinterest, instagram, tumblr, linkedin, etc.)
 social:
-  - title: Notion
-    url: https://suyeun.notion.site/83900228acec4c9ab1dd5f438bd22421?v=f47f21ede5694d9b96dd154fb6b66cd6&pvs=4
   - title: github
     url: https://github.com/LEESUSUSUSU
 
 # Postal address (add as many lines as necessary)
 address:
-  - line: 3481 Melrose Place
-  - line: Beverly Hills, CA 90210
+  - line: 경남 김해시 구산로 19번길 10
 
 # Credits content
 credits: 'Freelancer is a free to use, open source Bootstrap theme created by <a href="http://startbootstrap.com">Start Bootstrap</a>.'
