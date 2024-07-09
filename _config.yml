@@ -39,16 +39,10 @@ footer:
 
 # Social networks usernames (many more available: google-plus, flickr, dribbble, pinterest, instagram, tumblr, linkedin, etc.)
 social:
-  - title: twitter
-    url: http://twitter.com/jekyllrb
-  - title: facebook
-    url:
-  - title: stack-overflow
-    url: http://stackoverflow.com/questions/tagged/jekyll
-  - title: bitbucket
-    url: http://bitbucket.org/jekyll
+  - title: Notion
+    url: https://suyeun.notion.site/83900228acec4c9ab1dd5f438bd22421?v=f47f21ede5694d9b96dd154fb6b66cd6&pvs=4
   - title: github
-    url: http://github.com/jekyll
+    url: https://github.com/LEESUSUSUSU
 
 # Postal address (add as many lines as necessary)
 address:
