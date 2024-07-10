@@ -4,7 +4,175 @@ modal-id: 2
 date: 2023-11-22
 img: 대구교통.png
 alt: image-alt
-project-date: October 2014
-category: Data scientist
-description: hi there
+project-date: November 2023
+client: Dacon
+category: Data Scientist
+description: Development of a traffic accident damage prediction model using XGBoost for safer transportation environments.
+title: Traffic Accident Damage Prediction AI in Daegu
 ---
+
+<div class="container">
+    <h3>개인 공부를 위한 프로젝트 PORTFOLIO pdf 파일에는 존재 하지 않습니다.</h3>
+</div>
+
+<div style="background-color:#f0f8ff; padding: 20px; border-radius: 8px;">
+    <h3>프로젝트 진행 배경</h3>
+    <div style="margin-bottom: 10px;">
+        <strong>대회명:</strong> 2023 데이콘 대구 교통사고 피해 예측 AI 대회
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>주관:</strong> 데이콘
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>목적:</strong> 교통사고 피해를 예측하는 AI 모델을 개발하여 안전한 교통환경 조성
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>대회 기간:</strong> 2023년 11월 15일부터 2023년 12월 11일까지
+    </div>
+</div>
+
+<div style="background-color:#e6f7ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>데이터 수집</h3>
+    <div style="margin-bottom: 10px;">
+        <img src="Dagu/데이터수집1png.png" alt="Data Collection Image" style="width: 100%; height: auto;">
+    </div>
+    <div style="margin-bottom: 10px;">
+        <img src="Dagu/데이터수집2.png" alt="Data Collection Image 2" style="width: 100%; height: auto;">
+    </div>
+</div>
+
+<div style="background-color:#f0f8ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>EDA (Exploratory Data Analysis)</h3>
+    <div style="margin-bottom: 10px;">
+        <strong>기상 상태 분석:</strong> 맑음을 제외한 기상 상태를 분석한 결과
+    </div>
+    <div style="margin-bottom: 10px;">
+        <img src="Dagu/eda1.png" alt="Weather Analysis Image" style="width: 100%; height: auto;">
+    </div>
+    <div style="margin-bottom: 10px;">
+        <img src="Dagu/eda2.png" alt="Weather Analysis Image 2" style="width: 100%; height: auto;">
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>년별, 달별, 일별, 시간별 분석:</strong> 교통사고 발생 빈도와 시간, 날짜, 계절별 연관성 분석
+    </div>
+    <div style="margin-bottom: 10px;">
+        <img src="Dagu/eda3.png" alt="Time Series Analysis Image" style="width: 100%; height: auto;">
+    </div>
+</div>
+
+<div style="background-color:#e6f7ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>모델링</h3>
+    <div style="margin-bottom: 10px;">
+        XGBoost, RandomForestRegressor, GradientBoostingRegressor를 사용하여 교통사고 피해 예측 모델을 개발하였습니다.
+    </div>
+    <pre><code>
+import pandas as pd
+import numpy as np
+import xgboost as xgb
+from sklearn.metrics import mean_squared_error
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from sklearn.svm import SVR
+from math import sqrt
+from lightgbm import LGBMRegressor
+
+# 데이터 전처리
+train_df['사고일시'] = pd.to_datetime(train_df['사고일시'])
+train_df['년'] = train_df['사고일시'].dt.year
+train_df['월'] = train_df['사고일시'].dt.month
+train_df['일'] = train_df['사고일시'].dt.day
+train_df['시간'] = train_df['사고일시'].dt.hour
+
+test_df['사고일시'] = pd.to_datetime(test_df['사고일시'])
+test_df['년'] = test_df['사고일시'].dt.year
+test_df['월'] = test_df['사고일시'].dt.month
+test_df['일'] = test_df['사고일시'].dt.day
+test_df['시간'] = test_df['사고일시'].dt.hour
+
+train_encoded = pd.get_dummies(train_df.drop(['사고일시', 'ID', 'ECLO'], axis=1))
+test_encoded = pd.get_dummies(test_df.drop(['사고일시', 'ID'], axis=1))
+final_train, final_test = train_encoded.align(test_encoded, join='inner', axis=1)
+
+X_train = final_train
+y_train = train_df['ECLO']
+    </code></pre>
+</div>
+
+<div style="background-color:#f0f8ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>RandomForestRegressor, GradientBoostingRegressor, XGBoost 모델</h3>
+    <pre><code>
+# RandomForest and GradientBoosting models
+rf_models = [RandomForestRegressor(n_estimators=100 + i*10 ).fit(X_train, y_train) for i in range(5)]
+gb_models = [GradientBoostingRegressor(n_estimators=100 + i*10).fit(X_train, y_train) for i in range(2)]
+
+rf_predictions_list = [model.predict(final_test) for model in rf_models]
+gb_predictions_list = [model.predict(final_test) for model in gb_models]
+
+rf_mean_predictions = np.mean(rf_predictions_list, axis=0)
+gb_mean_predictions = np.mean(gb_predictions_list, axis=0)
+
+# XGBoost models
+xgb_models = []
+xgb_predictions_list = []
+
+for i in range 15:
+    model = xgb.XGBRegressor(objective='reg:squarederror',
+                             n_estimators=50 + 50 * i,
+                             max_depth=5,
+                             learning_rate=0.1,
+                             alpha=10,
+                             n_jobs=-1,
+                             gamma=0.01,
+                             subsample=0.75,
+                             colsample_bytree=0.3,
+                             reg_lambda=10)
+    model.fit(X_train, y_train)
+    xgb_models.append(model)
+    predictions = model.predict(final_test)
+    xgb_predictions_list.append(predictions)
+
+xgb_mean_predictions = np.mean(xgb_predictions_list, axis=0)
+    </code></pre>
+</div>
+
+<div style="background-color:#e6f7ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>모델 최적화 및 결과</h3>
+    <div style="margin-bottom: 10px;">
+        최적의 파라미터를 찾았으나 시간 부족으로 적용하지 못했습니다. 적용했다면 더 좋은 성능을 기대할 수 있었습니다.
+    </div>
+    <ul>
+        <li>Best parameters for RandomForestRegressor: {'max_depth': 10, 'min_samples_split': 10, 'n_estimators': 100}</li>
+        <li>Best RMSE for RandomForestRegressor: 3.1693621687119</li>
+        <li>Best parameters for GradientBoostingRegressor: {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 300}</li>
+        <li>Best RMSE for GradientBoostingRegressor: 3.168391474770304</li>
+        <li>Best parameters for GridSearchCV: {'learning_rate': 0.1, 'max_depth': 3, 'max_features': 'sqrt', 'min_samples_leaf': 4, 'min_samples_split': 2, 'n_estimators': 300}</li>
+        <li>Best parameters for xgboost: {'alpha': 10, 'colsample_bytree': 0.3, 'learning_rate': 0.1, 'max_depth': 5, 'n_estimators': 100, 'reg_lambda': 5}</li>
+        <li>Lowest RMSE for xgboost: 3.1597566362011293</li>
+    </ul>
+</div>
+
+<div style="background-color:#f0f8ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>앙상블 모델</h3>
+    <pre><code>
+# SVM Model
+svm_model = SVR().fit(X_train, y_train)
+svm_predictions = svm_model.predict(final_test)
+
+# 앙상블 모델 예측
+ensemble_predictions = (rf_mean_predictions + gb_mean_predictions + xgb_mean_predictions + svm_predictions) / 4
+ensemble_predictions = np.where(ensemble_predictions < 0, 0, ensemble_predictions)
+
+# 결과 제출 파일 생성
+submission = pd.DataFrame({'ID': test_df['ID'], 'ECLO': ensemble_predictions})
+submission.to_csv('/content/drive/MyDrive/DACON/대구 교통사고 피해 예측AI/예측/12_02.csv', index=False)
+    </code></pre>
+</div>
+
+<div style="background-color:#e6f7ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>결론</h3>
+    <div style="margin-bottom: 10px;">
+        <strong>경험 및 성과:</strong> 데이터 대회는 다양한 접근 방식과 시각을 경험할 수 있는 기회를 제공하며, 이를 통해 데이터 과학자로서 성장할 수 있습니다. 다양한 시각과 접근 방식을 수용하고 이해하는 것은 매우 중요합니다.
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>대회 성적:</strong> 최종적으로 303/946 등으로 마무리하였습니다.
+    </div>
+</div>

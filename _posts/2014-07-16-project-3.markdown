@@ -4,7 +4,135 @@ modal-id: 3
 date: 2024-01-22
 img: 유퀴즈.png
 alt: image-alt
-project-date: January 2014
+project-date: January 2024
 category: Data scientist
-description: hi there
+description: Analysis of TV ratings using machine learning models based on You Quiz data.
+title: Machine Learning Analysis Using You Quiz Data
 ---
+
+<div class="container">
+    <h3>첫 화면의 상단바에서 PORTFOLIO 다운 받으실 수 있습니다.</h3>
+</div>
+
+
+<div style="background-color:#f0f8ff; padding: 20px; border-radius: 8px;">
+    <h3>프로젝트 진행 배경</h3>
+    <div style="margin-bottom: 10px;">
+        <strong>프로젝트명:</strong> 유퀴즈 데이터를 이용한 머신러닝 분석
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>기간:</strong> 2024년 1월 ~ 2024년 2월
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>목적:</strong> 유퀴즈 프로그램의 출연진 데이터를 바탕으로 시청률과 조회수를 예측하는 모델 개발
+    </div>
+</div>
+
+<div style="background-color:#e6f7ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>프로젝트 개요</h3>
+    <div style="margin-bottom: 10px;">
+        <strong>팀 구성 및 기여도:</strong> 3명 / 34%
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>담당 역할:</strong>
+        <ul>
+            <li>수기 데이터 수집</li>
+            <li>EDA (회차, 날짜별, 계절별)</li>
+            <li>시청률 모델링</li>
+        </ul>
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>프로젝트 진행 배경:</strong> 프로젝트를 진행하며 수기로 데이터를 수집, 이를 바탕으로 EDA 후 모델링까지 만듬으로써 전반적인 데이터 모델링의 흐름을 익히고자 하였음.
+    </div>
+</div>
+
+<div style="background-color:#f0f8ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>데이터 수집</h3>
+    <div style="margin-bottom: 10px;">
+        <strong>수집 방법:</strong>
+        <ul>
+            <li>나무위키: 시즌, 회차, 날짜, 주제, 출연자, 시청률, 직업, 성별, 나이, 수상 여부, 인지도</li>
+            <li>유튜브 API: 제목, 조회수, 좋아요 수, 댓글 수, 재생 시간, 구독자 수, 회차</li>
+            <li>직접 수집: 직업군, 성별, 나이, 수상 여부, 인지도</li>
+        </ul>
+    </div>
+</div>
+
+<div style="background-color:#e6f7ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>EDA (Exploratory Data Analysis)</h3>
+    <div style="margin-bottom: 10px;">
+        <strong>이상치(Outliers) 확인 - BTS</strong>
+        <p>조회수, 좋아요 수, 댓글 수의 경우 상위 이상치 값이 나타남. 이는 다른 데이터들보다 훨씬 많은 조회수, 좋아요 수, 댓글 수를 가지고 있음을 알 수 있음. (BTS)</p>
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>계절적 변화에 따른 시청률 확인</strong>
+        <p>2023년부터 실내 마스크 착용 의무가 권고 사항으로 변경됨. 코로나19에 대한 경계심이 낮아지면서 사람들의 외부 활동이 증가함. 이 변화는 우상향하던 시청률의 증가세가 둔화되거나 멈추는 원인이 됨. 외부 활동하기 좋은 봄과 가을에 따른 평균 시청률이 소폭 하락하는 추세를 확인함.</p>
+    </div>
+</div>
+
+<div style="background-color:#f0f8ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>모델링</h3>
+    <div style="margin-bottom: 10px;">
+        <strong>모델 성능 비교:</strong>
+        <table>
+            <tr>
+                <th>모델</th>
+                <th>MAE</th>
+                <th>MAPE</th>
+            </tr>
+            <tr>
+                <td>GradientBoostingRegressor</td>
+                <td>0.28</td>
+                <td>6.38%</td>
+            </tr>
+            <tr>
+                <td>XGBRegressor</td>
+                <td>0.30</td>
+                <td>7.17%</td>
+            </tr>
+            <tr>
+                <td>RandomForestRegressor</td>
+                <td>0.45</td>
+                <td>10.39%</td>
+            </tr>
+        </table>
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>모델링 주요 코드:</strong>
+        <pre><code>
+X = df[['직업', '성별', '나이', '구독자수', '수상여부', '인지도']]
+y = df[['시청률']]
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
+from sklearn.ensemble import GradientBoostingRegressor, RandomForestRegressor
+from xgboost import XGBRegressor
+
+# 데이터 스케일링
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# 모델 학습
+models = {
+    'GradientBoostingRegressor': GradientBoostingRegressor(),
+    'XGBRegressor': XGBRegressor(),
+    'RandomForestRegressor': RandomForestRegressor()
+}
+
+for name, model in models.items():
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    print(f"{name} MAE: {mean_absolute_error(y_test, y_pred)}, MAPE: {mean_absolute_percentage_error(y_test, y_pred)}")
+        </code></pre>
+    </div>
+</div>
+
+<div style="background-color:#e6f7ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>결론</h3>
+    <div style="margin-bottom: 10px;">
+        <strong>경험 및 성과:</strong> 데이터를 수집하고 어떻게 가공하느냐에 따라 다양한 인사이트를 얻을 수 있음을 알게 되었습니다. 단순히 모델이 잘 되지 않을까라는 생각을 넘어서, 잘 되지 않는 이유를 고민하며 데이터에 대한 이해도를 높일 수 있었습니다.
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>최종 결론:</strong> 시청률 4.7%, 조회수 50만 예측
+    </div>
+</div>
