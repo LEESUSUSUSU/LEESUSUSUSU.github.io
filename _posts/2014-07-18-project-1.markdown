@@ -3,8 +3,269 @@ layout: default
 modal-id: 1
 date: 2023-10-24
 img: 기차대차.png
-alt: image-alt
-project-date: October 2014
-category: Data scientist
-description: hi there
+alt: Train noise analysis image
+project-date: October 2023
+client: 한국과학기술정보연구원
+category: Data Scientist
+description: Analysis of train noise data for public safety using AI algorithms
+title: 기차 소음 분석 프로젝트
 ---
+<div class="container">
+    <h3>첫 화면의 상단바에서 PORTFOLIO 다운 받으실 수 있습니다.</h3>
+    <h4>상세내용은 PORTFOLIO 파일을 확인해주세요</h4>
+</div>
+
+<div style="background-color:#f0f8ff; padding: 20px; border-radius: 8px;">
+    <h3>프로젝트 진행 배경</h3>
+    <div style="margin-bottom: 10px;">
+        <strong>대회명:</strong> 2023 DATA·AI 분석 경진대회
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>주관:</strong> 한국과학기술정보연구원
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>목적:</strong> 국민의 생활에서 발생하는 다양한 비언어적 소리를 데이터로 축적하여 공공 교통안전 현안 문제를 해결하기 위해 소리 데이터를 융합·활용하여 사회 문제 해결
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>요구사항:</strong> 기존에 수집된 기차의 소음 데이터를 활용, 소음 데이터 분석을 위한 AI 알고리즘 설계, 감지된 이상 소음의 위치 및 위험도 표시 기능
+    </div>
+</div>
+
+<div style="background-color:#e6f7ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>프로세스 요약</h3>
+    <div style="margin-bottom: 10px;">
+        <strong>채널별 음향 데이터</strong>
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>데이터 구조 분석</strong>
+        <div style="margin-left: 20px;">
+            <div style="margin-bottom: 10px;">수집된 데이터: 7일 동안 수집된 215개의 TDMS 파일과 82개의 JSON 파일</div>
+            <div>각 TDMS 파일은 다수의 채널로 구성, 파일마다 row 길이 다름</div>
+        </div>
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>메타 데이터</strong>
+        <div style="margin-left: 20px;">
+            <div style="margin-bottom: 10px;">포지션 정보: 0m 지점에서 BatCam2 주파수 카메라 설치, 기차가 센서에 진입한 후 33.2m 지점에서 촬영 종료</div>
+            <div style="margin-bottom: 10px;">기차 속도 계산: 0m 지점과 33.2m 지점에서의 시간을 측정하여 기차 속도 계산</div>
+            <div>horn 정보: 경적 소리의 유무</div>
+        </div>
+    </div>
+</div>
+
+<div style="background-color:#f0f8ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>데이터 전처리</h3>
+    <div style="margin-bottom: 10px;">
+        <strong>데이터 무거움 문제 해결:</strong> 데이터셋 최적화, 필요 없는 소리 제거, row 길이 통일
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>주파수 종류 인지 불가 문제 해결:</strong> 공통되지 않는 채널 1개 추출하여 분석 (PCA 기법 활용)
+    </div>
+</div>
+
+<div style="background-color:#e6f7ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>모델 선정</h3>
+    <div style="margin-bottom: 10px;">
+        <strong>목적:</strong> 타겟 없는 모델의 일관성 확인 및 이상 주파수 탐지
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>오토인코더 모델:</strong> 입력 차원 1/512로 줄이는 오토인코더 모델 사용, 재구성 오류 계산, 이상 데이터 탐지
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>푸리에 변환:</strong> 주파수 분석을 통해 데이터의 주파수 특성 파악, 오토인코더 모델 적용 (푸리: 물체는 일정한 주파수를 갖는다.)
+    </div>
+    <div>
+        <strong>임계값 기반 데이터 확인:</strong> 일정 임계값 이상인 데이터를 확인하여 대차 분석
+    </div>
+</div>
+
+<div style="background-color:#f0f8ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>베이스 라인 코드</h3>
+    <<div style="margin-bottom: 10px;">
+        <pre><code>
+# 데이터 정규화
+min_val = np.min(windowed_data)
+max_val = np.max(windowed_data)
+normalized_data = (windowed_data - min_val) / (max_val - min_val)
+
+# 오토인코더 모델 정의
+class Autoencoder(Model):
+    def __init__(self, input_dim):
+        super(Autoencoder, self).__init__()
+        self.encoder = tf.keras.Sequential([
+            layers.Dense(input_dim // 128, activation="relu"),
+            layers.Dense(input_dim // 256, activation="relu"),
+            layers.Dense(input_dim // 512, activation="relu")
+        ])
+
+        self.decoder = tf.keras.Sequential([
+            layers.Dense(input_dim // 256, activation="relu"),
+            layers.Dense(input_dim // 128, activation="relu"),
+            layers.Dense(input_dim, activation='sigmoid')
+        ])
+
+    def call(self, x):
+        encoded = self.encoder(x)
+        decoded = self.decoder(encoded)
+        return decoded
+    
+# 모델 생성 및 컴파일
+input_dim = normalized_data.shape[1] # 윈도우 크기에 따른 입력 차원
+autoencoder = Autoencoder(input_dim)
+autoencoder.compile(optimizer='adam', loss='mae')
+
+# 모델 학습
+history = autoencoder.fit(normalized_data, normalized_data,
+                          epochs=50,
+                          batch_size=512,
+                          validation_split=0.1,
+                          shuffle=True)
+
+# 모델 학습 과정 시각화
+plt.figure(figsize=(14, 5))
+plt.plot(history.history['loss'], label='Training Loss')
+plt.plot(history.history['val_loss'], label='Validation Loss')
+plt.title('Training and Validation Losses')
+        </code></pre>
+    </div>
+</div>
+
+<div style="background-color:#f0f8ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>개인적으로 실험한 코드</h3>
+    <div style="margin-bottom: 10px;">
+        <pre><code>
+import numpy as np
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers
+
+# ResNet block 함수
+def resnet_block(x, filters, kernel_size=3, stride=1):
+    residual = x
+
+    # 첫 번째 층
+    x = layers.Conv1D(filters, kernel_size, strides=stride, padding="same")(x)
+    x = layers.BatchNormalization()(x)
+    x = layers.ReLU()(x)
+
+    # 두 번째 층
+    x = layers.Conv1D(filters, kernel_size, padding="same")(x)
+    x = layers.BatchNormalization()(x)
+
+    # Residual connection
+    if stride != 1:
+        residual = layers.Conv1D(filters, 1, strides=stride)(residual)
+    x = layers.add([x, residual])
+    x = layers.ReLU()(x)
+
+    return x
+
+def autoencoder_with_resnet_lstm(input_dim, encoding_dim):
+    input_layer = keras.Input(shape=(input_dim, 1))  # 1D 데이터이므로 1을 추가
+
+    # Encoder: ResNet 블록 후 LSTM 사용
+    x = resnet_block(input_layer, 8)
+    x = resnet_block(x, 16, stride=2)
+    x = layers.LSTM(32, return_sequences=True)(x)  # Use LSTM directly, it will use CuDNN if possible
+
+    # Latent representation
+    x = layers.Flatten()(x)
+    encoded = layers.Dense(encoding_dim, activation='relu')(x)
+
+    # Decoder: Fully connected layers
+    x = layers.Dense(32, activation='relu')(encoded)
+    x = layers.Dense(input_dim, activation='sigmoid')(x)
+
+    autoencoder = keras.Model(input_layer, x)
+    encoder = keras.Model(input_layer, encoded)
+
+    return autoencoder, encoder
+
+sequences = []
+for _, groups in downsampled_data_per_file.items():
+    for _, channels in groups.items():
+        for _, data in channels.items():
+            sequences.append(data)
+
+# 최소 길이의 시퀀스만 선택하여 데이터를 필터링합니다.
+min_length = min([len(sequence) for sequence in sequences])
+filtered_data = [sequence[:min_length] for sequence in sequences]  # 필요하면 데이터를 잘라냅니다.
+
+input_dim = min_length
+encoding_dim = 16
+
+autoencoder, encoder = autoencoder_with_resnet_lstm(input_dim, encoding_dim)
+autoencoder.compile(optimizer='adam', loss='mean_squared_error')
+
+data = np.array(filtered_data)
+data /= np.max(data)
+data = np.expand_dims(data, axis=-1)
+
+autoencoder.fit(data, data, epochs=5, batch_size=128, shuffle=True, validation_data=(data, data))
+
+#Epoch 1/5
+#4/4 [==============================] - 14s 2s/step - loss: 0.2294 - val_loss: 0.2185
+#Epoch 2/5
+#4/4 [==============================] - 4s 1s/step - loss: 0.0370 - val_loss: 0.0317
+#Epoch 3/5
+#4/4 [==============================] - 4s 1s/step - loss: 7.0059e-04 - val_loss: 7.4736e-04
+#Epoch 4/5
+#4/4 [==============================] - 4s 1s/step - loss: 6.2637e-04 - val_loss: 6.0873e-04
+#Epoch 5/5
+#4/4 [==============================] - 4s 1s/step - loss: 6.2773e-04 - val_loss: 6.1220e-04
+
+# 노이즈 추가 함수
+def add_noise(data, noise_factor=0.5):
+    noise = np.random.normal(loc=0.0, scale=1.0, size=data.shape)
+    noisy_data = data + noise_factor * noise
+    return np.clip(noisy_data, 0., 1.)
+
+# 원본 데이터에 노이즈 추가
+noisy_data = add_noise(data, noise_factor=0.5)
+
+# 노이즈가 추가된 데이터로 autoencoder 훈련. 목표는 원본 데이터.
+autoencoder.fit(noisy_data, data, epochs=25, batch_size=128, shuffle=True, validation_data=(noisy_data, data))
+
+# 모델을 사용하여 노이즈 제거 테스트
+denoised_data = autoencoder.predict(noisy_data)
+
+#Epoch 1/25
+#4/4 [==============================] - 5s 1s/step - loss: 6.4361e-04 - val_loss: 6.3417e-04
+#Epoch 2/25
+#4/4 [==============================] - 4s 1s/step - loss: 6.4837e-04 - val_loss: 6.4087e-04
+#Epoch 3/25
+#4/4 [==============================] - 4s 1s/step - loss: 6.5105e-04 - val_loss: 6.4970e-04
+#Epoch 4/25
+#4/4 [==============================] - 4s 1s/step - loss: 6.5329e-04 - val_loss: 6.5425e-04
+
+
+        </code></pre>
+    </div>
+</div>
+
+<div style="background-color:#e6f7ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>결론</h3>
+    <div style="margin-bottom: 10px;">
+        <strong>경험 및 성과:</strong> 데이터 대회는 다양한 접근 방식과 시각을 경험할 수 있는 기회를 제공하며, 이를 통해 데이터 과학자로서 성장할 수 있습니다. 다양한 시각과 접근 방식을 수용하고 이해하는 것은 매우 중요합니다.
+    </div>
+    <div>
+        <strong>모델 성능:</strong>
+        <ul>
+            <li><strong>첫 번째 모델 세트 (FFT 후 오토인코더):</strong>
+                <ul>
+                    <li>MSE 값의 범위: 약 0.291 - 0.293</li>
+                    <li>MAE 값의 범위: 약 0.457 - 0.460</li>
+                </ul>
+            </li>
+            <li><strong>두 번째 모델 세트 (FFT 후 CNN 오토인코더):</strong>
+                <ul>
+                    <li>MSE 값의 범위: 약 0.0008 - 0.0011</li>
+                    <li>MAE 값의 범위: 약 0.013 - 0.014</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div>
+        <strong>모델 비교:</strong> MFCC 모델과 오토인코더 모델은 각각 다른 문제 영역을 탐지합니다. 오토인코더 모델은 horn 이외의 문제 탐지에 성공하여 주파수 도메인에서의 분석 유효성을 확인했습니다.
+    </div>
+</div>

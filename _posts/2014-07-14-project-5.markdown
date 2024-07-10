@@ -4,7 +4,84 @@ modal-id: 5
 date: 2024-04-30
 img: 신용카드.png
 alt: image-alt
-project-date: April 2014
+project-date: April 2024
 category: Data scientist
-description: hi there
+description: 신용카드 사기 탐지를 위한 다양한 머신러닝 기법을 활용한 프로젝트
+title: 신용카드 사기 탐지
 ---
+
+<div class="container">
+    <h3>첫 화면의 상단바에서 PORTFOLIO 다운 받으실 수 있습니다.</h3>
+    <h4>상세내용은 PORTFOLIO 파일을 확인해주세요</h4>
+</div>
+
+<div style="background-color:#f0f8ff; padding: 20px; border-radius: 8px;">
+    <h3>프로젝트 진행 배경</h3>
+    <div style="margin-bottom: 10px;">
+        <strong>프로젝트명:</strong> 신용카드 사기 탐지
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>수행 기간:</strong> 4주 (2024년 4월 - 2024년 5월)
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>목적:</strong> 대중의 안전한 신용카드 사용을 보장하기 위한 사기 탐지 모델 개발
+    </div>
+</div>
+
+<div style="background-color:#e6f7ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>프로세스 요약</h3>
+    <div style="margin-bottom: 10px;">
+        <strong>데이터 소스:</strong> Kaggle의 유럽 사기 데이터 및 Dacon의 한국 카드 사기 데이터
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>과제:</strong>
+        <ul>
+            <li>불균형 데이터</li>
+            <li>희귀 패턴 식별의 어려움으로 인한 잘못된 클러스터링</li>
+        </ul>
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>탐색적 데이터 분석 (EDA):</strong>
+        <ul>
+            <li>클래스 비율 균형 조정 및 Amount에 대해 StandardScaler, Time에 대해 RobustScaler를 사용한 정규화</li>
+            <li>StratifiedKFold를 사용한 검증</li>
+            <li>시간과 관련된 컬럼 분석</li>
+        </ul>
+    </div>
+</div>
+
+<div style="background-color:#f0f8ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>모델링</h3>
+    <div style="margin-bottom: 10px;">
+        <strong>사용된 모델:</strong> 로지스틱 회귀, CNN, K-최근접 이웃, 의사결정 나무, 서포트 벡터 머신 (SVM)
+    </div>
+    <div style="margin-bottom: 10px;">
+        모델 성능을 비교하고 최적의 성능을 달성하기 위해 다양한 모델을 학습하고 평가했습니다.
+    </div>
+</div>
+
+<div style="background-color:#e6f7ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>모델 최적화 및 결과</h3>
+    <div style="margin-bottom: 10px;">
+        <strong>최적화된 파라미터:</strong>
+        <ul>
+            <li>랜덤 포레스트: {'max_depth': 10, 'min_samples_split': 10, 'n_estimators': 100}</li>
+            <li>최고 RMSE: 3.1693621687119</li>
+            <li>그라디언트 부스팅: {'learning_rate': 0.01, 'max_depth': 3, 'n_estimators': 300}</li>
+            <li>최고 RMSE: 3.168391474770304</li>
+            <li>XGBoost: {'alpha': 10, 'colsample_bytree': 0.3, 'learning_rate': 0.1, 'max_depth': 5, 'n_estimators': 100, 'reg_lambda': 5}</li>
+            <li>최저 RMSE: 3.1597566362011293</li>
+        </ul>
+    </div>
+</div>
+
+
+<div style="background-color:#e6f7ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>결론</h3>
+    <div style="margin-bottom: 10px;">
+        <strong>경험 및 성과:</strong> 신용카드 사기 탐지 모델 개발을 통해 데이터 과학자로서의 역량을 강화할 수 있었으며, 다양한 머신러닝 기법을 활용하여 실제 문제를 해결하는 경험을 쌓을 수 있었습니다.
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>최종 결과:</strong> 최종적으로 모델의 성능을 개선하여 신용카드 사기 탐지에 성공하였습니다.
+    </div>
+</div>

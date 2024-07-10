@@ -4,7 +4,85 @@ modal-id: 4
 date: 2024-02-22
 img: 시각장애.png
 alt: image-alt
-project-date: January 2014
+project-date: February 2024
 category: Data scientist
-description: hi there
+description: A deep learning-based obstacle recognition project to assist visually impaired individuals.
+title: Deep Learning-Based Obstacle Recognition for Visually Impaired Assistance
 ---
+
+<div class="container">
+    <h3>첫 화면의 상단바에서 PORTFOLIO 다운 받으실 수 있습니다.</h3>
+    <h4>상세내용은 PORTFOLIO 파일을 확인해주세요</h4>
+</div>
+
+<div style="background-color:#f0f8ff; padding: 20px; border-radius: 8px;">
+    <h3>프로젝트 진행 배경</h3>
+    <div style="margin-bottom: 10px;">
+        <strong>프로젝트명:</strong> 시각 장애 보조를 위한 딥러닝 기반 장애물 인식
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>수행 기간:</strong> 4주 (2024.03 ~ 2024.04)
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>목적:</strong> 시각 장애 보조를 위한 위험탐지
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>팀 구성 및 기여도:</strong> 4명 / 25%
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>담당 역할:</strong> 위험탐지 코드 개발, 베이스 모델 오류 수정, 라벨링 작업
+    </div>
+</div>
+
+<div style="background-color:#e6f7ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>문제 개요</h3>
+    <div style="margin-bottom: 10px;">
+        시각장애인들을 돕기 위해 딥러닝을 이용한 프로그램을 진행하고자 하였으며, 휠체어 이용자들이 보도 주행에 있어 위험을 미리 감지하고자 하였습니다.
+    </div>
+</div>
+
+<div style="background-color:#f0f8ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>데이터 수집</h3>
+    <div style="margin-bottom: 10px;">
+        23가지의 Class를 정하고, 수집된 영상 데이터를 3초 단위 프레임으로 나눈 뒤 각 Class당 최소 1,000개 수집을 목표로 라벨링을 직접 수행하였습니다.
+    </div>
+</div>
+
+<div style="background-color:#e6f7ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>데이터 라벨링 및 학습 과정 요약</h3>
+    <div style="margin-bottom: 10px;">
+        1차 학습: Class 목록 40여 개로 100 epochs 학습
+    </div>
+    <div style="margin-bottom: 10px;">
+        2차 학습: 필요 없는 Class 제거 후 10 epochs 재학습
+    </div>
+</div>
+
+<div style="background-color:#f0f8ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>모델 학습 및 성능</h3>
+    <div style="margin-bottom: 10px;">
+        <strong>2차 학습 결과:</strong> 
+        <ul>
+            <li>Precision(B): 0.80254</li>
+            <li>Recall(B): 0.68715</li>
+            <li>mAP50(B): 0.90292</li>
+            <li>mAP50-95(B): 0.72743</li>
+        </ul>
+    </div>
+    <div style="margin-bottom: 10px;">
+        <strong>3차 학습 결과:</strong> 
+        <ul>
+            <li>Precision(B): 0.75168</li>
+            <li>Recall(B): 0.48834</li>
+            <li>mAP50(B): 0.88301</li>
+            <li>mAP50-95(B): 0.56906</li>
+        </ul>
+    </div>
+</div>
+
+<div style="background-color:#e6f7ff; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h3>결론</h3>
+    <div style="margin-bottom: 10px;">
+        <strong>경험 및 성과:</strong> YOLOv8을 활용한 객체 탐지 과정을 통해 딥러닝 모델의 구축 및 튜닝에 대한 이해가 높아졌으며, 객체 탐지 모델의 성능 평가 지표 해석과 모델 개선 방안 도출에 대해 경험할 수 있었습니다.
+    </div>
+</div>
